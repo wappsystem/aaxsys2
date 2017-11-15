@@ -1,0 +1,71 @@
+<section>
+    <div id=toolbar__ID class="navbar navbar-default">
+        <form class="form-inline">
+			<!--
+            <button type=button id=query__ID class='btn btn-secondary'>Search</button>
+			&nbsp;&nbsp;&nbsp;
+		-->
+			<span id=q__ID></span>
+        </form>
+    </div>
+    <div id=table__ID>
+        <table id=grid__ID></table>
+    </div>
+</section>
+<style>
+    #toolbar__ID{
+		background-color:#ccc;
+		margin-bottom:0px;
+		overflow:hidden;
+        padding: 8px 0 8px 6px;
+	}
+    #toolbar__ID .form-inline > * {
+        margin-right:5px;
+    }
+	@media screen and (max-width:768px){
+		#toolbar__ID{
+			padding: 3px 10px;
+		}
+		#toolbar__ID div{
+			padding-left:3px;
+		}
+	}
+</style>
+<script>
+	//-------------------------------------
+	VmInclude:__COMPONENT__/grid/grid.v3.js
+	//-------------------------------------
+	_fields="Address,City,Country,ContactEmail,ContactName,ContactPhone";
+	//-------------------------------------
+	_cell_render=function(records,I,field,td,set_value,source){
+		switch(field){
+		}
+	}
+	//-------------------------------------
+	$('#D__ID').on('load',function(){
+		$('#q__ID').text($vm.search_parameter);
+		_set_req(); _request_data();
+	})
+	//---------------------------------
+	_set_req=function(){
+        sql="?"+$vm.search_parameter;
+		_req={cmd:'aaxsys',sql:sql}
+	}
+	//---------------------------------
+	_request_data=function(){
+		var mt1=new Date().getTime();
+		$VmAPI.request({data:_req,callback:function(res){
+			_records=res.result.SearchResults.AvailableUnits.Unit;
+			var mt2=new Date().getTime(); var tt_all=mt2-mt1; var tt_server=parseInt(res.elapsed); if(tt_all<tt_server) tt_all=tt_server;
+			$("#elapsed__ID").text((JSON.stringify(_records).length/1000).toFixed(1)+"kb/"+tt_all.toString()+"ms/"+tt_server+'ms');
+			_render();
+		}});
+	}
+	//---------------------------------
+</script>
+<style>
+	VmInclude:__COMPONENT__/grid/grid.v3.css
+	#D__ID{
+		animation: vm_module_fadein 1.0s;
+	}
+</style>
