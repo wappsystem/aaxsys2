@@ -66,7 +66,7 @@
             // res
 			_records=res.result.SearchResults.AvailableUnits.Unit;
             //res is the output from the server. It's in JSON format. Use Inspect (Consol) in the web page to see request and response.
-            //Requested data is put into _records so we can use the standard way of displaying it based on fields
+            //Requested data is put into _records so we can use the standard way of displaying it based on _fields
             //If you want to manipulate the data and show it in another way you can do it here.
 			var mt2=new Date().getTime(); var tt_all=mt2-mt1; var tt_server=parseInt(res.elapsed); if(tt_all<tt_server) tt_all=tt_server;
 			$("#elapsed__ID").text((JSON.stringify(_records).length/1000).toFixed(1)+"kb/"+tt_all.toString()+"ms/"+tt_server+'ms');
