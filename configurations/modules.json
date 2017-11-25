@@ -5,6 +5,7 @@
         "first-test":	  		{"url":"modules/task/first-test.html","name_for_search":"First test"},
 		"second-test":	  		{"url":"modules/task/second-test.html","name_for_search":"Second test"},
 		"second-test-result":	{"url":"modules/task/second-test-result.html","name_for_search":""},
+		"test": {"url" : "/modules/dynamic/test.html","table_id" : "20011346","name_for_search" : "Dynamic test"},
 
 		"link-1":	      {"url":"https://vmiis.github.io/modular-distributed-web-application/modules/static/basic/under-construction.html","name_for_search":"Link 1","text":"Under Construction"},
 		"link-2":	      {"url":"https://vmiis.github.io/modular-distributed-web-application/modules/static/basic/under-construction.html","name_for_search":"Link 2","text":"Not Ready"},
