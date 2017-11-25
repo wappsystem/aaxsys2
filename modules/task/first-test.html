@@ -2,6 +2,8 @@
     <div id=toolbar__ID class="navbar navbar-default">
         <form class="form-inline">
             <button type=button id=query__ID class='btn btn-secondary'>Search</button> (Fixed Query)
+            Start Date: <input id=t1__ID type=text style="width: 150px; display:inline-block;" class="form-control" />
+            End Date: <input id=t2__ID type=text style="width: 150px; display:inline-block;" class="form-control" />
         </form>
     </div>
     <div id=table__ID>
@@ -32,6 +34,11 @@
 	//-------------------------------------
 	VmInclude:__COMPONENT__/grid/grid.v3.js
 	//-------------------------------------
+    $('#t1__ID').datepicker({dateFormat:'dd/mm/yy',changeMonth:true, changeYear:true});
+    $('#t2__ID').datepicker({dateFormat:'dd/mm/yy',changeMonth:true, changeYear:true});
+    $('#t1__ID').val($vm.date_to_string_dmy($vm.date_today()));
+    $('#t2__ID').val($vm.date_to_string_dmy($vm.date_add_days($vm.date_today(),30)));
+    //-------------------------------------
 	_fields="Address,City,State,Country,ContactEmail,ContactName,ContactPhone";
 	//-------------------------------------
 	_cell_render=function(records,I,field,td,set_value,source){
@@ -42,16 +49,25 @@
 	$('#D__ID').on('load',function(){ _set_req(); _request_data(); })
 	//---------------------------------
 	_set_req=function(){
-		//var sql=$('#keyword__ID').val();
-		//if(sql=='')
-        sql='?Source=AAXSYS&Vendor=AMSI-SF&Type=XML&City=*&BEDROOMS=&Results=30&Furnished=FURNISHED&BeginDay=31&BeginMonth=8&BeginYear=2017&EndDay=31&EndMonth=8&EndYear=2017';
+        //This function is setting up the request for the server. I have added the start and end date to the previous fixed query.
+        //Ohter things can be added. Now I have used the toolbar for the entries. We can make a separate page for it. The output is in grid format but this can also be changed.
+        var startdate=$('#t1__ID').val().split('/');
+        var enddate=$('#t1__ID').val().split('/');
+//        sql='?Source=AAXSYS&Vendor=AMSI-SF&Type=XML&City=*&BEDROOMS=&Results=30&Furnished=FURNISHED&BeginDay=31&BeginMonth=8&BeginYear=2017&EndDay=31&EndMonth=8&EndYear=2017';
+        sql='?Source=AAXSYS&Vendor=AMSI-SF&Type=XML&City=*&BEDROOMS=&Results=30&Furnished=FURNISHED&BeginDay='+startdate[0]+'&BeginMonth='+startdate[1]+'&BeginYear='+startdate[2]+'&EndDay='+enddate[0]+'&EndMonth='+enddate[1]+'&EndYear='+enddate[2]+'';
 		_req={cmd:'aaxsys',sql:sql}
+        //Request. aaxsys is the function used on the server. sql are the parameters
 	}
 	//---------------------------------
 	_request_data=function(){
-		var mt1=new Date().getTime();
+        //Function for sending the data to the server
+		var mt1=new Date().getTime(); //For measuring the time it takes for the request to be completed
 		$VmAPI.request({data:_req,callback:function(res){
+            // res
 			_records=res.result.SearchResults.AvailableUnits.Unit;
+            //res is the output from the server. It's in JSON format. Use Inspect (Consol) in the web page to see request and response.
+            //Requested data is put into _records so we can use the standard way of displaying it based on fields
+            //If you want to manipulate the data and show it in another way you can do it here.
 			var mt2=new Date().getTime(); var tt_all=mt2-mt1; var tt_server=parseInt(res.elapsed); if(tt_all<tt_server) tt_all=tt_server;
 			$("#elapsed__ID").text((JSON.stringify(_records).length/1000).toFixed(1)+"kb/"+tt_all.toString()+"ms/"+tt_server+'ms');
 			_render();
